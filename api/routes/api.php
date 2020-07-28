@@ -14,6 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+Route::group(['middleware' => 'cors'], function() {
+    Route::resource('/food', 'FoodController')->except(["create", "edit"]);
+    Route::resource('/category', 'FoodCategoryController')->except(["create", "edit"]);
+    Route::resource('/order', 'OrderController');
+    Route::post('/login', 'UserController@Login');
+    Route::post('/register', 'UserController@Register');
+    Route::get('/user/{user}', 'UserController@getUser');
+    Route::post('/food/comment', 'FoodController@createComment');
+    Route::put('/food/comment', 'FoodController@updateComment');
+    Route::delete('/food/comment/{comment}', 'FoodController@deleteComment');
 });
